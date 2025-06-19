@@ -29,7 +29,7 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 
 
 % Snapshot time
-snapshot = Nt/4;                 % On enregistre qu'un demi des données --> /4 pour la moitié
+snapshot = Nt/10;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
 
 % Data Loading
 fddata = zeros(Nx, 4);
