@@ -32,8 +32,9 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 snapshot = Nt/10;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
 
 % Data Loading
-fddata = zeros(Nx, 8);             % 4 colonnes pour les axes spatials, et les 4 autres pour le champs
-cndata = zeros(Nx, 8);
+x      = zeros(Nx, 4);
+fddata = zeros(Nx, 4);             
+cndata = zeros(Nx, 4);
 
 for idx = 1:numel(mesh_density)
     % Chargement des données FDTD
@@ -51,10 +52,9 @@ for idx = 1:numel(mesh_density)
     CN_snap_times = M2_1(:, snapshot);
 
     % Reshape des données chargées
-    fddata(:,idx) = M1_1(:,1);  % Premier colonne pour l'axe spatial
-    cndata(:,idx) = M2_1(:,1);  % Premier colonne pour
-    fddata(:,4 + idx) = FD_snap_times;
-    cndata(:,4 + idx) = CN_snap_times;
+    x(:,idx) = M1_1(:,1);  % Premier colonne pour l'axe spatial
+    fddata(:,idx) = FD_snap_times;
+    cndata(:,idx) = CN_snap_times;
 end
 fprintf("\n\n Size fd-data %d %d \n\n Size cn-data %d %d \n\n", size(fddata), size(cndata));
 
