@@ -42,6 +42,26 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 snapshot = 100;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
 
 
+%% Fonction analytique
+% Fast fourier transformation
+f_s = zeros(numel(mesh_density), 1);
+for idf = 1:numel(mesh_density)
+    f_s(idf) = 1 / dt(idf); % Fréquence d'échantillonnage
+end
+for idt = 1:numel(mesh_density)
+    T(idt) = 1 / f_s(idt); % Période d'échantillonage
+end
+
+
+
+
+
+
+
+
+
+
+
 
 %% Chargement des données
 
