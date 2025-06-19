@@ -1,21 +1,31 @@
 %% Parameter
+epsilon_0 = 8.854187817e-12;
+mu_0 = 12.56637061e-7;
+c = 1 / sqrt(epsilon_0 * mu_0);
+
+% Parametres de l'onde
+fmax = 1.0d9;                    % Frequence
+lambda = c / fmax;               % Wavelength
+omega0 = 2 * pi * fmax;          % Angular frequency
+k0 = 2 * pi / lambda;            % Wavenumber
+attfmax = 1000.;
+att0 = 1000.;
+a0 = 1.0;
+T = sqrt( log(attfmax) ) / (pi * fmax);
+t0 = T * sqrt( log(att0) );
+
+
+% Approximation parameter
+CFL = 0.98;
+S = CFL;
+
+
+% Parametres de discretisation
 Nt = 1000;
 Nx = 500;
 mesh_density = [10, 20, 30, 50, 100];
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
-epsilon_0 = 8.854187817e-12;
-mu_0 = 12.56637061e-7;
-c = 1 / sqrt(epsilon_0 * mu_0);
-
-fmax = 1.0d9;                    % Frequence
-lambda = c / fmax;               % Wavelength
-omega0 = 2 * pi * fmax;          % Angular frequency
-k0 = 2 * pi / lambda;            % Wavenumber
-
-% Approximation parameter
-CFL = 0.98;
-S = CFL;
 dx = zeros(numel(mesh_density), 1);
 dt = zeros(numel(mesh_density), 1);
 
@@ -30,6 +40,26 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 
 % Snapshot time
 snapshot = 100;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
+
+
+%% Fonction analytique
+% Fast fourier transformation
+f_s = zeros(numel(mesh_density), 1);
+for idf = 1:numel(mesh_density)
+    f_s(idf) = 1 / dt(idf); % Fréquence d'échantillonnage
+end
+fprintf("fréquence echantillonage : %.15f\n %.15f\n %.15f\n %.15f\n %.15f\n", ...
+    f_s)
+for idt = 1:numel(mesh_density)
+    T(idt) = 1 / f_s(idt);
+end
+
+
+
+
+
+
+%% Chargement des données
 
 % Data Loading
 x      = zeros(Nx, numel(mesh_density));
@@ -61,6 +91,11 @@ fprintf("\n\n Size fd-data %d %d \n\n Size cn-data %d %d \n\n", size(fddata), si
 % Initialisation de l'onde plane analytique
 E_ana = zeros(Nx, numel(mesh_density));
 fprintf("\n Size E analytic = %d %d \n",size(E_ana));
+
+
+
+
+
 
 %% Calcul de l'onde plane analytique
 for idt = 1:numel(mesh_density)

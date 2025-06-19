@@ -21,14 +21,14 @@ fd2_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_2.txt") ;
 fd3_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_3.txt") ;
 fd4_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_4.txt") ;
 fd5_interm = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt");
-%fd6_interm = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_6.txt");
+fd6_interm = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_6.txt");
 
 CN1_interm   = load("/home/emin/Documents/CN_FDTD1D/E_1.txt") ;
 CN2_interm  = load("/home/emin/Documents/CN_FDTD1D/E_2.txt") ;
 CN3_interm  = load("/home/emin/Documents/CN_FDTD1D/E_3.txt") ;
 CN4_interm  = load("/home/emin/Documents/CN_FDTD1D/E_4.txt") ;
 CN5_interm = load("/home/emin/Documents/CN_FDTD1D/E_5.txt") ;
-%CN6_interm = load("/home/emin/Documents/CN_FDTD1D/E_6.txt") ;
+CN6_interm = load("/home/emin/Documents/CN_FDTD1D/E_6.txt") ;
 
 % Reshape
 FD1   = reshape(fd1_interm, [Nx, n_block + 1])  ;
@@ -36,14 +36,14 @@ FD2  = reshape(fd2_interm, [Nx, n_block + 1]) ;
 FD3  = reshape(fd3_interm, [Nx, n_block + 1]) ;
 FD4  = reshape(fd4_interm, [Nx, n_block + 1]) ;
 FD5 = reshape(fd5_interm, [Nx, n_block + 1]);
-%FD6 = reshape(fd6_interm, [Nx, n_block + 1]);
+FD6 = reshape(fd6_interm, [Nx, n_block + 1]);
 
 CN1   = reshape(CN1_interm, [Nx, n_block + 1])  ;
 CN2  = reshape(CN2_interm, [Nx, n_block + 1]) ;
 CN3  = reshape(CN3_interm, [Nx, n_block + 1]) ;
 CN4  = reshape(CN4_interm, [Nx, n_block + 1]) ;
 CN5 = reshape(CN5_interm, [Nx, n_block + 1]);
-%CN6 = reshape(CN6_interm, [Nx, n_block + 1]);
+CN6 = reshape(CN6_interm, [Nx, n_block + 1]);
 
 %% Ecriture des fonctions au temps T_1
 x = zeros(Nx, sd_length);
