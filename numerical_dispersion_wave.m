@@ -1,7 +1,7 @@
 %% Parameter
 Nt = 1000;
 Nx = 500;
-mesh_density = [3., 6., 20., 50., 100.];
+mesh_density = [10, 20, 30, 50, 100];
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
 epsilon_0 = 8.854187817e-12;
@@ -10,7 +10,7 @@ c = 1 / sqrt(epsilon_0 * mu_0);
 
 fmax = 1.0d9;                    % Frequence
 lambda = c / fmax;               % Wavelength
-omega0 = 2 * pi * fmax;           % Angular frequency
+omega0 = 2 * pi * fmax;          % Angular frequency
 k0 = 2 * pi / lambda;            % Wavenumber
 
 % Approximation parameter
@@ -29,7 +29,7 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 
 
 % Snapshot time
-snapshot = Nt/10;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
+snapshot = 100;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
 
 % Data Loading
 x      = zeros(Nx, numel(mesh_density));
@@ -64,8 +64,7 @@ fprintf("\n Size E analytic = %d %d \n",size(E_ana));
 
 %% Calcul de l'onde plane analytique
 for idt = 1:numel(mesh_density)
-    t = snapshot * dt(idt);                 % Temps de l'onde analytique
-    disp(t)
+    t = 5 * (snapshot - 2) * dt(idt);                 % Temps de l'onde analytique
 
     E_ana(:,idt) = sin(omega0 * t - k0 * x(:,idt));  % Onde plane analytique
 end
@@ -73,19 +72,21 @@ end
 figure();
 fig = gcf;
 fig.Position = [250,50,1200,800];
+
+tl = tiledlayout('flow','TileSpacing','compact');
+
 for i = 1:numel(mesh_density)
-    subplot(3,3,i)
-    plot(x(:,i),E_ana(:,i),"red"); hold on
-    plot(x(:,i),fddata(:,i),"--b");
-    plot(x(:,i),cndata(:,i), "--g");
+    nexttile
+    plot(x(:,i),E_ana(:,i),'LineWidth',1.25); hold on
+    plot(x(:,i),fddata(:,i),"o--",'MarkerIndices',1:5:length(fddata(:,i)))
+    plot(x(:,i),cndata(:,i), "^--r",'MarkerIndices',1:5:length(fddata(:,i))); 
     ax = gca;
     ax.YLim = [-1 1];
-    ax.XLim = [0 1];
-    title('Densité spatiale de \lambda / ', num2str(mesh_density(i)) );
+    ax.XLim = [0 0.3];
+    title('Densité spatiale : \lambda / ', num2str(mesh_density(i)) );
     grid on;
 end
 
-subplot(3,3,6)
-lg = legend('Signal Analyitque', 'Signal approximé par FDTD', "Signal approximé par CNFDTD", ...
-    'Location','northeast');
-
+lg = legend('Signal Analyitque', 'Signal approximé par FDTD', "Signal approximé par CNFDTD");
+lg.Layout.Tile = 6;
+lg.FontSize = 14;

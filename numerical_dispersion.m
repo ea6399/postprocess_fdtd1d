@@ -27,7 +27,6 @@ CN_vg_c = (CFL * dx / 2) / c * cos(kdx/2) ./ (1 + CFL^2 * sin(kdx/2).^2);
 %% Display
 % 1) Dispersion : omega_dt vs kd
 figure('Color','white');
-figure(1);
 fig = gcf;
 fig.Position = [400,250,800,600];
 plot(kdx, CFL*kdx, 'LineWidth',1.2); hold on        %w dt = CFL * k dx (Dispersion physique)
@@ -41,7 +40,6 @@ grid on
 
 % 2) Vitesse de phase
 figure('Color','white');
-figure(2);
 fig = gcf;
 fig.Position = [400,250,800,600];
 plot(kdx, vphi_c, "Color", "#D95319"); hold on
@@ -55,7 +53,6 @@ grid on
 
 % 3) Vitesse de groupe
 figure('Color','white');
-figure(3);
 fig = gcf;
 fig.Position = [400,250,800,600];
 plot(kdx, vg_c, 'Color', '#D95319'); hold on
@@ -74,7 +71,7 @@ CN_err_tol = abs(CFL * kdx - CN_omega_dt) ./ (CFL * kdx);
 tol = 0.01;
 
 
-figure();
+
 figure('Color','white');
 fig = gcf;
 fig.Position = [400,250,800,600];
@@ -90,7 +87,7 @@ ax.YLim = [0 0.01];
 dim1 = [0.25 0.1 0.25 0.2];
 dim2 = [0.65 0.7 0.25 0.2];
 str1 = 'N_\lambda \approx 2 \pi / 0.3 \approx 20 pts /\lambda min';
-str2 = 'N_\lambda \approx 2 \pi / 1.9 \approx 5 pts /\lambda min';
+str2 = 'N_\lambda \approx 2 \pi / 1.9 \approx 3 pts /\lambda min';
 annotation('textbox',dim1, ...
            'String', str1, ...
            'FitBoxToText', ...

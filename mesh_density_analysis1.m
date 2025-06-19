@@ -10,31 +10,31 @@ fprintf("Nombre de block : %d\n", n_block);
 
 
 %% Chargement des données
-fd5_interm   = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt")  ;
-fd10_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_10.txt") ;
-fd30_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_30.txt") ;
-fd50_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_50.txt") ;
-fd100_interm = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_100.txt");
+fd1_interm   = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_1.txt")  ;
+fd2_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_2.txt") ;
+fd3_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_3.txt") ;
+fd4_interm  = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_4.txt") ;
+fd5_interm = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt");
 
-CN5_interm   = load("/home/emin/Documents/CN_FDTD1D/E_5.txt")  ;
-CN10_interm  = load("/home/emin/Documents/CN_FDTD1D/E_10.txt") ;
-CN30_interm  = load("/home/emin/Documents/CN_FDTD1D/E_30.txt") ;
-CN50_interm  = load("/home/emin/Documents/CN_FDTD1D/E_50.txt") ;
-CN100_interm = load("/home/emin/Documents/CN_FDTD1D/E_100.txt");
+CN1_interm   = load("/home/emin/Documents/CN_FDTD1D/E_1.txt")  ;
+CN2_interm  = load("/home/emin/Documents/CN_FDTD1D/E_2.txt") ;
+CN3_interm  = load("/home/emin/Documents/CN_FDTD1D/E_3.txt") ;
+CN4_interm  = load("/home/emin/Documents/CN_FDTD1D/E_4.txt") ;
+CN5_interm = load("/home/emin/Documents/CN_FDTD1D/E_5.txt");
 
 % Reshape
 
-FD5   = reshape(fd5_interm, [Nx, n_block + 1])  ;
-FD10  = reshape(fd10_interm, [Nx, n_block + 1]) ;
-FD30  = reshape(fd30_interm, [Nx, n_block + 1]) ;
-FD50  = reshape(fd50_interm, [Nx, n_block + 1]) ;
-FD100 = reshape(fd100_interm, [Nx, n_block + 1]);
+FD1   = reshape(fd1_interm, [Nx, n_block + 1])  ;
+FD2  = reshape(fd2_interm, [Nx, n_block + 1]) ;
+FD3  = reshape(fd3_interm, [Nx, n_block + 1]) ;
+FD4  = reshape(fd4_interm, [Nx, n_block + 1]) ;
+FD5 = reshape(fd5_interm, [Nx, n_block + 1]);
 
-CN5   = reshape(CN5_interm, [Nx, n_block + 1])  ;
-CN10  = reshape(CN10_interm, [Nx, n_block + 1]) ;
-CN30  = reshape(CN30_interm, [Nx, n_block + 1]) ;
-CN50  = reshape(CN50_interm, [Nx, n_block + 1]) ;
-CN100 = reshape(CN100_interm, [Nx, n_block + 1]);
+CN1   = reshape(CN1_interm, [Nx, n_block + 1])  ;
+CN2  = reshape(CN2_interm, [Nx, n_block + 1]) ;
+CN3  = reshape(CN3_interm, [Nx, n_block + 1]) ;
+CN4  = reshape(CN4_interm, [Nx, n_block + 1]) ;
+CN5 = reshape(CN5_interm, [Nx, n_block + 1]);
 
 %% Display times
 n1 = 10;
@@ -51,14 +51,14 @@ x = FD5(:,1);      % Intervalle d'etude
 
 
 %% Figure 1
-fd5_n1 = FD5(:,n1);
-cn5_n1 = CN5(:,n1);
+fd1_n1 = FD1(:,n1);
+cn1_n1 = CN1(:,n1);
 
-fd5_n2 = FD5(:,n2);
-cn5_n2 = CN5(:,n2);
+fd1_n2 = FD1(:,n2);
+cn1_n2 = CN1(:,n2);
 
-fd5_n3 = FD5(:,n3);
-cn5_n3 = CN5(:,n3);
+fd1_n3 = FD1(:,n3);
+cn1_n3 = CN1(:,n3);
 
 
 f1 = figure('Color','white');
