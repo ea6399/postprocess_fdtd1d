@@ -26,10 +26,10 @@ number_snap = numel(snap_times);
 
 % Data Loading
 FD1 = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
-M2 = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
-disp(size(M))
+CN1 = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
+
 fddata = reshape(FD1, [Nx, n_block + 1]);
-cndata = reshape(M2, [Nx,n_block + 1]);
+cndata = reshape(CN1, [Nx,n_block + 1]);
 fprintf("\n Size data %d %d \n Size cn-data %d %d", size(fddata), size(cndata));
 
 % Initialisation de l'onde plane analytique
