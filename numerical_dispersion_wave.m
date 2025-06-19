@@ -25,10 +25,10 @@ snap_times = [10, 50, 150];
 number_snap = numel(snap_times);
 
 % Data Loading
-M = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
+FD1 = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
 M2 = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
 disp(size(M))
-fddata = reshape(M, [Nx, n_block + 1]);
+fddata = reshape(FD1, [Nx, n_block + 1]);
 cndata = reshape(M2, [Nx,n_block + 1]);
 fprintf("\n Size data %d %d \n Size cn-data %d %d", size(fddata), size(cndata));
 
