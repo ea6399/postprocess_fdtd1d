@@ -14,10 +14,16 @@ omega0 = 2 * pi * fmax;           % Angular frequency
 k0 = 2 * pi / lambda;            % Wavenumber
 
 % Approximation parameter
-dx = lambda / mesh_density(:);                % 30 pts per wavelength
 CFL = 0.98;
 S = CFL;
-dt = S * dx /c;
+dx = zeros(numel(mesh_density), 1);
+dt = zeros(numel(mesh_density), 1);
+
+for idx = 1:numel(mesh_density)
+    dx(idx) = lambda / mesh_density(idx);
+    dt(idx) = S * dx(idx) / c;
+end
+
 fprintf( "\n  dx(i) = %f\n %f\n %f\n %f\n \n", dx(1), dx(2), dx(3), dx(4));
 fprintf( "\n  dt(i) = %f\n %f\n %f\n %f\n \n", dt(1), dt(2), dt(3), dt(4));
 
