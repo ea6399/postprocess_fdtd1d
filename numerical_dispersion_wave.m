@@ -25,7 +25,7 @@ for idx = 1:numel(mesh_density)
 end
 
 fprintf( "\n  dx(i) = %f\n %f\n %f\n %f\n \n", dx(1), dx(2), dx(3), dx(4));
-fprintf( "\n  dt(i) = %f\n %f\n %f\n %f\n \n", dt(1), dt(2), dt(3), dt(4));
+fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), dt(4));
 
 
 % Snapshot times
