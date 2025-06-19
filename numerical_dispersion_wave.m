@@ -42,9 +42,17 @@ for idx = 1:numel(mesh_density)
     % Chargement des données CN-FDTD
     M2 = load(sprintf("/home/emin/Documents/CN_FDTD1D/E_%d.txt", idx));
 
+    % Extraction du temps de simulation choisi
+    M1_1 = reshape(M1, [Nx, n_block + 1]);
+    M2_1 = reshape(M2, [Nx, n_block + 1]);
+
+    % Extraction des snapshots
+    FD_snap_times = M1_1(:, snapshot);
+    CN_snap_times = M2_1(:, snapshot);
+
     % Reshape des données chargées
-    fddata(:,idx) = reshape(M1, [Nx, n_block + 1]);
-    cndata(:,idx) = reshape(M2, [Nx,n_block + 1]);
+    fddata(:,idx) = FD_snap_times;
+    cndata(:,idx) = CN_snap_times;
 end
 fprintf("\n Size data %d %d \n Size cn-data %d %d", size(fddata), size(cndata));
 
