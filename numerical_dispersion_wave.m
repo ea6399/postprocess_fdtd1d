@@ -60,29 +60,21 @@ fprintf("\n\n Size fd-data %d %d \n\n Size cn-data %d %d \n\n", size(fddata), si
 
 % Initialisation de l'onde plane analytique
 E_ana = zeros(Nx, numel(mesh_density));
-
 fprintf("\n Size E analytic = %d %d \n",size(E_ana));
 
-% Axe spatial
-x(:) = fddata(:,1);                     
-disp(size(x));
+%% Calcul de l'onde plane analytique
+for idt = 1:numel(mesh_density)
+    t = snapshot * dt(idt);                 % Temps de l'onde analytique
 
-% Chargement des temps de comparaison
-for idx = 1:number_snap
-    t = snap_times(idx) * dt;
-
-    E_ana(:,idx) = sin(omega0 * t - k0 * x);
-
-    E_num(:,idx) = fddata(:,snap_times(idx));
-    CN_E_num(:,idx) = cndata(:,snap_times(idx));
+    E_ana(:,idt) = sin(omega0 * t - k0 * x(:,idt));  % Onde plane analytique
 end
 
 figure();
 fig = gcf;
 fig.Position = [450,250,800,600];
-plot(x,E_ana(:,2),"red"); hold on
-plot(x,E_num(:,2),"--b");
-plot(x,CN_E_num(:,2), "--g");
+plot(x(:,1),E_ana(:,1),"red"); hold on
+plot(x(:,1),fddata(:,1),"--b");
+plot(x(:,1),cndata(:,1), "--g");
 ax = gca;
 ax.YLim = [-1 1];
 ax.XLim = [0 1];
