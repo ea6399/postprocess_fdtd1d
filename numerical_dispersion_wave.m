@@ -1,7 +1,7 @@
 %% Parameter
 Nt = 1000;
 Nx = 500;
-mesh_density = [3. 6. 20. 50.];
+mesh_density = [3., 6., 20., 50., 100.];
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
 epsilon_0 = 8.854187817e-12;
@@ -32,9 +32,9 @@ fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), 
 snapshot = Nt/10;                 % On enregistre qu'une fois sur deux sur 5 itérations --> 2 * 5
 
 % Data Loading
-x      = zeros(Nx, 4);
-fddata = zeros(Nx, 4);             
-cndata = zeros(Nx, 4);
+x      = zeros(Nx, numel(mesh_density));
+fddata = zeros(Nx, numel(mesh_density));             
+cndata = zeros(Nx, numel(mesh_density));
 
 for idx = 1:numel(mesh_density)
     % Chargement des données FDTD
@@ -65,18 +65,27 @@ fprintf("\n Size E analytic = %d %d \n",size(E_ana));
 %% Calcul de l'onde plane analytique
 for idt = 1:numel(mesh_density)
     t = snapshot * dt(idt);                 % Temps de l'onde analytique
+    disp(t)
 
     E_ana(:,idt) = sin(omega0 * t - k0 * x(:,idt));  % Onde plane analytique
 end
 
 figure();
 fig = gcf;
-fig.Position = [450,250,800,600];
-plot(x(:,1),E_ana(:,1),"red"); hold on
-plot(x(:,1),fddata(:,1),"--b");
-plot(x(:,1),cndata(:,1), "--g");
-ax = gca;
-ax.YLim = [-1 1];
-ax.XLim = [0 1];
-legend('Signal Analyitque', 'Signal approximé par FDTD', "Signal approximé par CNFDTD");
-grid on;
+fig.Position = [250,50,1200,800];
+for i = 1:numel(mesh_density)
+    subplot(3,3,i)
+    plot(x(:,i),E_ana(:,i),"red"); hold on
+    plot(x(:,i),fddata(:,i),"--b");
+    plot(x(:,i),cndata(:,i), "--g");
+    ax = gca;
+    ax.YLim = [-1 1];
+    ax.XLim = [0 1];
+    title('Densité spatiale de \lambda / ', num2str(mesh_density(i)) );
+    grid on;
+end
+
+subplot(3,3,6)
+lg = legend('Signal Analyitque', 'Signal approximé par FDTD', "Signal approximé par CNFDTD", ...
+    'Location','northeast');
+
