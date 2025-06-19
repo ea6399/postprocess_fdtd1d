@@ -28,16 +28,24 @@ fprintf( "\n  dx(i) = %f\n %f\n %f\n %f\n \n", dx(1), dx(2), dx(3), dx(4));
 fprintf( "\n  dt(i) = %.15f\n %.15f\n %.15f\n %.15f\n \n", dt(1), dt(2), dt(3), dt(4));
 
 
-% Snapshot times
-snap_times = [10, 50, 150];
-number_snap = numel(snap_times);
+% Snapshot time
+snapshot = Nt/4;                 % On enregistre qu'un demi des données --> /4 pour la moitié
 
 % Data Loading
-FD1 = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_4.txt");
-CN1 = load("/home/emin/Documents/CN_FDTD1D/E_4.txt");
+fddata = zeros(Nx, 4);
+cndata = zeros(Nx, 4);
 
-fddata = reshape(FD1, [Nx, n_block + 1]);
-cndata = reshape(CN1, [Nx,n_block + 1]);
+for idx = 1:numel(mesh_density)
+    % Chargement des données FDTD
+    M1 = load(sprintf("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_%d.txt", idx));
+    
+    % Chargement des données CN-FDTD
+    M2 = load(sprintf("/home/emin/Documents/CN_FDTD1D/E_%d.txt", idx));
+
+    % Reshape des données chargées
+    fddata(:,idx) = reshape(M1, [Nx, n_block + 1]);
+    cndata(:,idx) = reshape(M2, [Nx,n_block + 1]);
+end
 fprintf("\n Size data %d %d \n Size cn-data %d %d", size(fddata), size(cndata));
 
 % Initialisation de l'onde plane analytique
