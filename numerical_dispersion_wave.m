@@ -1,7 +1,7 @@
 %% Parameter
 Nt = 1000;
 Nx = 500;
-mesh_density = 50;
+mesh_density = [3, 6, 20, 50];
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
 epsilon_0 = 8.854187817e-12;
@@ -14,10 +14,12 @@ omega0 = 2 * pi * fmax;           % Angular frequency
 k0 = 2 * pi / lambda;            % Wavenumber
 
 % Approximation parameter
-dx = lambda / mesh_density;                % 30 pts per wavelength
+dx = lambda / mesh_density(:);                % 30 pts per wavelength
 CFL = 0.98;
 S = CFL;
 dt = S * dx /c;
+fprintf( "\n  dx(i) = %f\n %f\n %f\n %f\n \n", dx(1), dx(2), dx(3), dx(4));
+fprintf( "\n  dt(i) = %f\n %f\n %f\n %f\n \n", dt(1), dt(2), dt(3), dt(4));
 
 
 % Snapshot times
