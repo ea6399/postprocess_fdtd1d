@@ -1,7 +1,7 @@
 %% Parameter
 Nt = 1000;
 Nx = 500;
-mesh_density = [3, 6, 20, 50];
+mesh_density = [3. 6. 20. 50.];
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
 epsilon_0 = 8.854187817e-12;
@@ -27,8 +27,8 @@ snap_times = [10, 50, 150];
 number_snap = numel(snap_times);
 
 % Data Loading
-FD1 = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
-CN1 = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
+FD1 = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_4.txt");
+CN1 = load("/home/emin/Documents/CN_FDTD1D/E_4.txt");
 
 fddata = reshape(FD1, [Nx, n_block + 1]);
 cndata = reshape(CN1, [Nx,n_block + 1]);
