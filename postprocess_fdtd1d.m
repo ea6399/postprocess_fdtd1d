@@ -11,8 +11,8 @@ fprintf("Densite spatial %d \n",spatial_density);
 
 %% Data loading
 
-M_temp_fd = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt");
-M_temp_cn = load("/home/emin/Documents/CN_FDTD1D/E_5.txt");
+M_temp_fd = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
+M_temp_cn = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
 
 M_fd = reshape(M_temp_fd, [Nx, n_block + 1]);       % La première colonne est l'intervalle d'étude
 M_cn = reshape(M_temp_cn, [Nx, n_block + 1]);
