@@ -1,5 +1,5 @@
 %% Parametre d'affichage
-Nx = 500; % Nx + 1 points de 0 a 499
+Nx = 2000; % Nx + 1 points de 0 a 499
 Nt = 1000;
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
@@ -11,8 +11,8 @@ fprintf("Densite spatial %d \n",spatial_density);
 
 %% Data loading
 
-M_temp_fd = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt");
-M_temp_cn = load("/home/emin/Documents/CN_FDTD1D/data/E.txt");
+M_temp_fd = load("/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt");
+M_temp_cn = load("/home/emin/Documents/CN_FDTD1D/E_5.txt");
 
 M_fd = reshape(M_temp_fd, [Nx, n_block + 1]);       % La première colonne est l'intervalle d'étude
 M_cn = reshape(M_temp_cn, [Nx, n_block + 1]);
@@ -28,7 +28,7 @@ n2 = n_block/2;
     if (mod(n2,2) > 0) 
         n2 = int32(n2) + 1;
     end
-n3 = n_block - 3 * snapshot; 
+n3 = n_block; 
 
 fprintf("Temps d'affichage :\n n1 = %d \n n2 = %d\n n3 = %d\n", n1, n2, n3);
 

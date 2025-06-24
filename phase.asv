@@ -58,7 +58,7 @@ t = 0:dt:(Nt-1)*dt; % Vecteur temps [s]
 fprintf('\n Taille vecteur temps: %d\n', length(t));
 
 %% Sélection du point spatial
-x_j0 = 50; % Indice spatial (Nx/4 pour Nx=500)
+x_j0 = 75; % Indice spatial (Nx/4 pour Nx=500)
 e_fd = E_fd(x_j0, :); % Signal temporel FD
 e_cn = E_cn(x_j0, :); % Signal temporel CN
 
