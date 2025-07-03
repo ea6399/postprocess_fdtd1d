@@ -143,14 +143,14 @@ if __name__ == "__main__":
 
     # Calculer la relation de dispersion numérique (nombre d'onde k en fonction de w)
     x_obs = pt_observation * dx  # Position du point d'observation
-    omega = 2 * np.pi * f_ax[:n_ech//2]  # Fréquences angulaires w = 2*pi*f
+    omega = 2 * np.pi * f_ax[:n_ech]  # Fréquences angulaires w = 2*pi*f
 
     # Relation de dispersion théorique pour référence
     k_theo = omega / c
 
      # Calculer les nombres d'onde numériques (k = phase/distance)
-    k_fd = - phase_fd_unwrapped[:n_ech//2] / x_obs
-    k_cn = - phase_cn_unwrapped[:n_ech//2] / x_obs
+    k_fd = phase_fd_unwrapped[:n_ech] / x_obs + k_theo  
+    k_cn = phase_cn_unwrapped[:n_ech] / x_obs + k_theo  
 
     # Dispersion numérique théorique
     k_fd_theo = (2/dx) * np.arcsin( (1/S) * np.sin(omega * dt/2) )
