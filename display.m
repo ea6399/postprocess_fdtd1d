@@ -1,26 +1,38 @@
+%% Data loading
+path_params = '/home/emin/Documents/CN_FDTD1D/data/params.txt';
+params = load(path_params);  % Nt, Nx + 1, dx, dt, snapshot
+Nx = params(1);
+Nt = params(2);
+dx = params(3);
+dt = params(4);
+mesh_density = params(5);
+CFL = params(6);
+snapshot = params(7);
+
+
 
 %% Affichage de la Gaussienne
 % Parametre 
-Nx = 499;
 Nx = Nx + 1;
-Nt = 1000;
-snapshot = 5;
-CFL = 0.98;
 n_block = Nt / snapshot;       
 disp(n_block);
 
 M = load('/home/emin/Documents/CN_FDTD1D/data/E.txt');
+%M = load('/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E.txt')
 disp(size(M));
 
 M_resh = reshape(M,[Nx,n_block + 1]);
 disp("Reshape M");
 disp(size(M_resh));
 
+fprintf('Temps de propagation %d', n_block)
+
+
 
 % On charge les données :
 n1 = 10;
-n2 = 50;
-n3 = 150;
+n2 = 500;
+n3 = 900;
 x = M_resh(:,1);             % Intervalle spatial
 y = M_resh(:,n1);             % Observateur 1 | 2 | 3
 y1 = M_resh(:,n2);           

@@ -1,6 +1,6 @@
 %% Chargement des données
-data_fd = '/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_5.txt';
-data_cn = '/home/emin/Documents/CN_FDTD1D/E_5.txt';
+data_fd = '/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/E_1.txt';
+data_cn = '/home/emin/Documents/CN_FDTD1D/E_1.txt';
 path_params = '/home/emin/Documents/TP_FDTD/1D/stage_tp_fdtd/params.txt';
 
 %% Paramètres de la simulation
@@ -9,7 +9,6 @@ mu_0 = 4 * pi * 1e-7;         % Perméabilité du vide [H/m]
 c = 1 / sqrt(epsilon_0 * mu_0); % Vitesse de la lumière [m/s]
 fprintf('\n Vitesse de la lumière c: %.3e m/s\n', c);
 
-mesh_density = 50;
 fmax = 1e9;                    % Fréquence maximale [Hz]
 lambda = c / fmax;             % Longueur d'onde [m]
 omega = 2 * pi * fmax;         % Pulsation [rad/s]
@@ -27,7 +26,7 @@ Nx = params(2);
 dx = params(3);
 dt = params(4);
 snapshot = params(5);
-n_block = Nt / snapshots; 
+n_block = Nt / snapshot; 
 
 % Pas spatial et temporel
 fprintf('\n Pas spatial dx: %.3e m\n', dx);
@@ -41,13 +40,13 @@ fprintf('\n Données E chargées.\n');
 fprintf('\n Taille données E: [%d, %d]\n', size(E_fd_interm));
 
 %% Redimensionnement
-E_fd = reshape(E_fd_interm, n_block + 1, Nx).';  % Transposition pour [Nx, n_block+1]
-E_cn = reshape(E_cn_interm, n_block + 1, Nx).';
+E_fd = reshape(E_fd_interm, [Nx, n_block]);  % Transposition pour [Nx, n_block+1]
+E_cn = reshape(E_cn_interm, [Nx, n_block]);
 
 fprintf('\n Taille données E (FD après reshape): [%d, %d]\n', size(E_fd));
 fprintf('\n Taille données E (CN après reshape): [%d, %d]\n', size(E_cn));
 
-n_ech = numel(E_fd(1,:))-1;
+n_ech = numel(E_fd(2,:)) - 1;  % 0 -> Nt - 1
 T_max = n_ech * (snapshot*dt);
 df = 1 / T_max;
 fs = 1 / (snapshot*dt); % Fréquence d'échantillonnage [Hz]
@@ -63,7 +62,7 @@ t = (0:dt*snapshot:T_max);
 fprintf('\n Taille vecteur temps: %d\n', length(t));
 
 %% Sélection du point spatial
-x_j0 = 419; % Indice spatial (Nx/4 pour Nx=1500)
+x_j0 = 150; %
 e_fd = E_fd(x_j0, :); % Signal temporel FD
 e_cn = E_cn(x_j0, :); % Signal temporel CN
 
@@ -96,8 +95,8 @@ nufig = 5;
 %% Tracé de la réponse temporel
 figure(nufig);clf(nufig);
 set(gcf,'Position', [100 100 900 600], 'Color', 'white');
-plot(t, e_fd, '-', 'DisplayName', 'FDTD');hold on
-plot(t, e_cn, '--', 'DisplayName','CNFDTD');
+plot(t(1:1000), e_fd, '-', 'DisplayName', 'FDTD');hold on
+plot(t(1:1000), e_cn, '--', 'DisplayName','CNFDTD');
 legend('show');
 grid on;
 hold on;

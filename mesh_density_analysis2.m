@@ -3,7 +3,7 @@ Nx = 500; % Nx + 1 points de 0 a 499
 Nt = 1000;
 snapshot = 5;       % Data sauvegardé 
 n_block = Nt / snapshot;
-spatial_density = [2.5, 5, 10, 20, 50, 100];
+spatial_density = [5, 10, 20, 30, 50, 100];
 sd_length = numel(spatial_density);
 CFL = 0.98;
 fprintf("\n Nombre de block : %d\n", n_block);
@@ -141,5 +141,7 @@ title(['Densité spatial : ', ...
     num2str(spatial_density(6)), ' au temps : t = ', ...
     num2str(T_1) '*dt']);
 grid on;
+
+sgtitle('Schéma de Yee et de CN avec CFL = 0.5')
 
 
