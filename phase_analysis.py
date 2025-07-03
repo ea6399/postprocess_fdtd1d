@@ -82,11 +82,16 @@ if __name__ == "__main__":
     fs = 1 / (snapshot * dt)  # Fréquence d'échantillonnage
     print(f"Fréquence d'échantillonnage : {fs:.2e} Hz")
 
-    pt_observation = int(Nx / 2)  # Point d'observation
-    print(f"Point d'observation : {pt_observation}")
-    sp_fd = np.fft.fft(E_fd[pt_observation,:])  # FFT le long de l'axe temporel
-    sp_cn = np.fft.fft(E_cn[pt_observation,:])
-    print("Shape des spectres :", sp_fd.shape, sp_cn.shape)
+
+    pt_observation1 = 0  # Point d'observation
+    pt_observation2 = int(Nx / 2)  # Point d'observation
+    print(f"Point d'observation : {pt_observation1}, {pt_observation2}")
+    sp_fd1 = np.fft.fft(E_fd[pt_observation1,:])  # FFT le long de l'axe temporel
+    sp_cn1 = np.fft.fft(E_cn[pt_observation1,:])
+    sp_fd2 = np.fft.fft(E_fd[pt_observation2,:])  # FFT le long de l'axe temporel
+    sp_cn2 = np.fft.fft(E_cn[pt_observation2,:])
+    print("Shape des spectres au point d'observation ",pt_observation1, ":", sp_fd1.shape, sp_cn1.shape)
+    print("Shape des spectres au point d'observation ",pt_observation2, ":", sp_fd2.shape, sp_cn2.shape)
 
     #f_ax = np.fft.fftfreq(n_ech, d = snapshot * dt)  # Fréquences associées
     f_ax = np.arange(0,fs,df)   # Fréquences associées avec la résolution df
@@ -98,8 +103,8 @@ if __name__ == "__main__":
 
     # Calcul des amplitudes
     fig3 = plt.figure(figsize=(10, 6))
-    plt.plot(f_ax, np.abs(sp_fd), label='FDTD')
-    plt.plot(f_ax, np.abs(sp_cn), label='CN', linestyle='--')
+    plt.plot(f_ax, np.abs(sp_fd2), label='FDTD')
+    plt.plot(f_ax, np.abs(sp_cn2), label='CN', linestyle='--')
     xlabel = 'Fréquence (Hz)'
     ylabel = 'Amplitude du spectre'
     plt.xlabel(xlabel)
@@ -111,15 +116,20 @@ if __name__ == "__main__":
 
 
     # Calcul des phases
-    phase_fd = np.angle(sp_fd)  # Phase du spectre FDTD
-    phase_cn = np.angle(sp_cn)  # Phase du spectre CN
-    phase_fd_unwrapped = np.unwrap(np.angle(sp_fd))     # Unwrapped phase
-    phase_cn_unwrapped = np.unwrap(np.angle(sp_cn))     # Unwrapped phase
+    phase_fd1 = np.angle(sp_fd1)  # Phase du spectre FDTD
+    phase_cn1 = np.angle(sp_cn1)  # Phase du spectre CN
+    phase_fd_unwrapped1 = np.unwrap(np.angle(sp_fd1))     # Unwrapped phase
+    phase_cn_unwrapped1 = np.unwrap(np.angle(sp_cn1))     
+
+    phase_fd2 = np.angle(sp_fd2)  
+    phase_cn2 = np.angle(sp_cn2)  
+    phase_fd_unwrapped2 = np.unwrap(np.angle(sp_fd2))     
+    phase_cn_unwrapped2 = np.unwrap(np.angle(sp_cn2))     
 
 
     fig4 = plt.figure(figsize=(10, 6))
-    plt.plot(f_ax, phase_fd, label='FDTD')
-    plt.plot(f_ax, phase_cn, label='CN', linestyle='--')
+    plt.plot(f_ax, phase_fd2, label='FDTD')
+    plt.plot(f_ax, phase_cn2, label='CN', linestyle='--')
     xlabel = 'Fréquence (Hz)'
     ylabel = 'Phase du spectre'
     plt.xlabel(xlabel)
@@ -130,8 +140,8 @@ if __name__ == "__main__":
     plt.close()
 
     fig5 = plt.figure(figsize=(10, 6))
-    plt.plot(f_ax, phase_fd_unwrapped, label='FDTD')
-    plt.plot(f_ax, phase_cn_unwrapped, label='CN', linestyle='--')
+    plt.plot(f_ax, phase_fd_unwrapped2, label='FDTD')
+    plt.plot(f_ax, phase_cn_unwrapped2, label='CN', linestyle='--')
     xlabel = 'Fréquence (Hz)'
     ylabel = 'Phase dépliée du spectre'
     plt.xlabel(xlabel)
@@ -142,15 +152,17 @@ if __name__ == "__main__":
 
 
     # Calculer la relation de dispersion numérique (nombre d'onde k en fonction de w)
-    x_obs = pt_observation * dx  # Position du point d'observation
-    omega = 2 * np.pi * f_ax[:n_ech]  # Fréquences angulaires w = 2*pi*f
+    x_obs1 = pt_observation1 * dx  # Position du point d'observation
+    x_obs2 = pt_observation2 * dx  # Position du point d'observation
+
+    omega = 2 * np.pi * f_ax[:n_ech//2]  # Fréquences angulaires w = 2*pi*f
 
     # Relation de dispersion théorique pour référence
     k_theo = omega / c
 
      # Calculer les nombres d'onde numériques (k = phase/distance)
-    k_fd = phase_fd_unwrapped[:n_ech] / x_obs + k_theo  
-    k_cn = phase_cn_unwrapped[:n_ech] / x_obs + k_theo  
+    k_fd = (phase_fd_unwrapped1[:n_ech//2] - phase_fd_unwrapped2[:n_ech//2]) / x_obs2 + k_theo  
+    k_cn = (phase_cn_unwrapped1[:n_ech//2] - phase_cn_unwrapped2[:n_ech//2]) / x_obs2 + k_theo  
 
     # Dispersion numérique théorique
     k_fd_theo = (2/dx) * np.arcsin( (1/S) * np.sin(omega * dt/2) )
