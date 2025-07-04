@@ -54,7 +54,7 @@ S = CFL;
 
 
 %% Sélection du point spatial
-x_j0 = 50; % Indice spatial
+x_j0 = int32(Nx/2); % Indice spatial
 e_fd = E_fd(x_j0, :); % Signal temporel FD
 e_cn = E_cn(x_j0, :); % Signal temporel CN
 
@@ -74,31 +74,32 @@ fprintf('\n Fréquence d''échantillonnage fs: %.3e Hz', fs);
 df = 1 / T_max;           % Résolution fréquentielle
 f_axis = ( -Nt/2 : Nt/2 - 1 )*df;
 % Conserve les fréquence positive uniquement
-f_pos = f_axis >= 0;
+f_pos = f_axis >= 0;            % Masque des fréquence positive
 f_axis_pos = f_axis(f_pos);
 
 z_fd = Efd_fft;
 z_cn = Ecn_fft;
 
-f_shift = fftshift(f_axis);
-z_fd_shift = fftshift(z_fd);
-z_cn_shift = fftshift(z_cn);
+z_fd_pos = z_fd(1 : length(f_axis_pos));
+z_cn_pos = z_cn(1 : length(f_axis_pos));
+
+
 
 
 
 %% Tracé du spectre
 figure('Position', [100 100 1200 800], 'Color','white');
 subplot(1,2,1)
-plot(f_axis,abs(z_fd),'DisplayName','FDTD'); hold on
-plot(f_axis,abs(z_cn),'--','DisplayName','CNFDTD')
+plot(f_axis_pos,abs(z_fd_pos),'DisplayName','FDTD'); hold on
+plot(f_axis_pos,abs(z_cn_pos),'--','DisplayName','CNFDTD')
 xlabel('Fréquence (Hz)');
 ylabel('Amplitude Champ E');
 legend('show');
 grid on;
 
 subplot(1,2,2);
-plot(f_axis,unwrap(angle(z_fd)),'DisplayName','FDTD'); hold on
-plot(f_axis,unwrap(angle(z_cn)),'--','DisplayName','CNFDTD');
+plot(f_axis_pos,unwrap(angle(z_fd_pos)),'DisplayName','FDTD'); hold on
+plot(f_axis_pos,unwrap(angle(z_cn_pos)),'--','DisplayName','CNFDTD');
 title('Phase');
 xlabel('Frequency [Hz]');
 ylabel('Phase / \pi');
