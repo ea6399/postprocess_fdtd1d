@@ -52,9 +52,6 @@ t0 = T * sqrt(log(att0));
 CFL = 0.5;
 S = CFL;
 
-fs = 1 / dt; % Fréquence d'échantillonnage [Hz]
-fprintf('\n Fréquence d''échantillonnage fs: %.3e Hz', fs);
-
 
 %% Sélection du point spatial
 x_j0 = 50; % Indice spatial
@@ -69,12 +66,24 @@ fprintf('\n Taille e_cn: %d\n', length(e_cn));
 Efd_fft = fft(e_fd);
 Ecn_fft = fft(e_cn);
 
-df = 1 / (Nt * snapshot *  dt);
+n_ech = length(e_fd);
+fprintf("\n Echantillon temporels : %d \n", size(e_fd))
+T_max = n_ech * snapshot * dt;
+fs = 1 / (snapshot * dt); % Fréquence d'échantillonnage [Hz]
+fprintf('\n Fréquence d''échantillonnage fs: %.3e Hz', fs);
+df = 1 / T_max;           % Résolution fréquentielle
 f_axis = ( -Nt/2 : Nt/2 - 1 )*df;
-w_axis =  f_axis;
+% Conserve les fréquence positive uniquement
+f_pos = f_axis >= 0;
+f_axis_pos = f_axis(f_pos);
 
 z_fd = Efd_fft;
 z_cn = Ecn_fft;
+
+f_shift = fftshift(f_axis);
+z_fd_shift = fftshift(z_fd);
+z_cn_shift = fftshift(z_cn);
+
 
 
 %% Tracé du spectre
@@ -88,8 +97,8 @@ legend('show');
 grid on;
 
 subplot(1,2,2);
-plot(w_axis,unwrap(angle(z_fd)),'DisplayName','FDTD'); hold on
-plot(w_axis,unwrap(angle(z_cn)),'--','DisplayName','CNFDTD');
+plot(f_axis,unwrap(angle(z_fd)),'DisplayName','FDTD'); hold on
+plot(f_axis,unwrap(angle(z_cn)),'--','DisplayName','CNFDTD');
 title('Phase');
 xlabel('Frequency [Hz]');
 ylabel('Phase / \pi');

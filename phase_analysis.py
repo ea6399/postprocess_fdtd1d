@@ -94,7 +94,7 @@ if __name__ == "__main__":
     print("Shape des spectres au point d'observation ",pt_observation2, ":", sp_fd2.shape, sp_cn2.shape)
 
     #f_ax = np.fft.fftfreq(n_ech, d = snapshot * dt)  # Fréquences associées
-    f_ax = np.arange(0,fs,df)   # Fréquences associées avec la résolution df
+    f_ax = np.arange(0,fs//2,df)   # Fréquences associées avec la résolution df
     print("Fréquences associées :", f_ax.shape)
 
 
