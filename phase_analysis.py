@@ -83,19 +83,16 @@ if __name__ == "__main__":
     print(f"Fréquence d'échantillonnage : {fs:.2e} Hz")
 
 
-    pt_observation1 = 0  # Point d'observation
     pt_observation2 = int(Nx / 2)  # Point d'observation
-    print(f"Point d'observation : {pt_observation1}, {pt_observation2}")
-    sp_fd1 = np.fft.fft(E_fd[pt_observation1,:])  # FFT le long de l'axe temporel
-    sp_cn1 = np.fft.fft(E_cn[pt_observation1,:])
+    print(f"Point d'observation : {pt_observation2}")
     sp_fd2 = np.fft.fft(E_fd[pt_observation2,:])  # FFT le long de l'axe temporel
     sp_cn2 = np.fft.fft(E_cn[pt_observation2,:])
-    print("Shape des spectres au point d'observation ",pt_observation1, ":", sp_fd1.shape, sp_cn1.shape)
     print("Shape des spectres au point d'observation ",pt_observation2, ":", sp_fd2.shape, sp_cn2.shape)
 
     #f_ax = np.fft.fftfreq(n_ech, d = snapshot * dt)  # Fréquences associées
-    f_ax = np.arange(0,fs//2,df)   # Fréquences associées avec la résolution df
+    f_ax = np.arange(0,fs,df)   # Fréquences associées avec la résolution df
     print("Fréquences associées :", f_ax.shape)
+    
 
 
 
@@ -115,12 +112,7 @@ if __name__ == "__main__":
     plt.close()
 
 
-    # Calcul des phases
-    phase_fd1 = np.angle(sp_fd1)  # Phase du spectre FDTD
-    phase_cn1 = np.angle(sp_cn1)  # Phase du spectre CN
-    phase_fd_unwrapped1 = np.unwrap(np.angle(sp_fd1))     # Unwrapped phase
-    phase_cn_unwrapped1 = np.unwrap(np.angle(sp_cn1))     
-
+    # Calcul des phases   
     phase_fd2 = np.angle(sp_fd2)  
     phase_cn2 = np.angle(sp_cn2)  
     phase_fd_unwrapped2 = np.unwrap(np.angle(sp_fd2))     
@@ -152,17 +144,12 @@ if __name__ == "__main__":
 
 
     # Calculer la relation de dispersion numérique (nombre d'onde k en fonction de w)
-    x_obs1 = pt_observation1 * dx  # Position du point d'observation
     x_obs2 = pt_observation2 * dx  # Position du point d'observation
 
     omega = 2 * np.pi * f_ax[:n_ech//2]  # Fréquences angulaires w = 2*pi*f
 
     # Relation de dispersion théorique pour référence
     k_theo = omega / c
-
-     # Calculer les nombres d'onde numériques (k = phase/distance)
-    k_fd = (phase_fd_unwrapped1[:n_ech//2] - phase_fd_unwrapped2[:n_ech//2]) / x_obs2 + k_theo  
-    k_cn = (phase_cn_unwrapped1[:n_ech//2] - phase_cn_unwrapped2[:n_ech//2]) / x_obs2 + k_theo  
 
     # Dispersion numérique théorique
     k_fd_theo = (2/dx) * np.arcsin( (1/S) * np.sin(omega * dt/2) )
@@ -175,8 +162,6 @@ if __name__ == "__main__":
 
     # Afficher les relations de dispersion
     fig1 = plt.figure(figsize=(10, 6))
-    plt.plot(omega, k_fd, '--', label='FDTD')
-    plt.plot(omega, k_cn, '--', label='CN-FDTD')
     plt.plot(omega, k_theo, 'k-', label='Physique')
     plt.plot(omega, k_fd_theo, '-', label='FDTD Théorique')
     plt.plot(omega, k_cn_theo, '-', label='CN-FDTD Théorique')

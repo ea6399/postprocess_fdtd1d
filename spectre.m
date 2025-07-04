@@ -95,8 +95,8 @@ nufig = 5;
 %% Tracé de la réponse temporel
 figure(nufig);clf(nufig);
 set(gcf,'Position', [100 100 900 600], 'Color', 'white');
-plot(t(1:1000), e_fd, '-', 'DisplayName', 'FDTD');hold on
-plot(t(1:1000), e_cn, '--', 'DisplayName','CNFDTD');
+plot(t, e_fd, '-', 'DisplayName', 'FDTD');hold on
+plot(t, e_cn, '--', 'DisplayName','CNFDTD');
 legend('show');
 grid on;
 hold on;
