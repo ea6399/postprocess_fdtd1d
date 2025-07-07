@@ -82,28 +82,26 @@ z_cn = Ecn_fft;
 z_fd_pos = z_fd(1 : length(f_ax_pos));
 z_cn_pos = z_cn(1 : length(f_ax_pos));
 
+phase_fd = unwrap(angle(z_fd_pos));
+phase_cn = unwrap(angle(z_cn_pos));
+
 
 %% Phase théorique
 x_obs = x_j0 * dx;              % Position du point d'observation
 omega_pos = 2 * pi * f_ax_pos;  % Fréquence angulairs
 
 k_theo = omega_pos / c;
-phase_theo =  k_theo * x_obs;
-% 
+k_fd_measured =  phase_fd ./x_obs;
+k_cn_measured =  phase_cn ./ x_obs;
+
 % % Relations de dispersion numériques théoriques
-% k_fd_theo = (2/dx) * asin((1/S) * sin(omega_pos * dt/2));
-% k_cn_theo = (2/dx) * atan((1/S) * sin(omega_pos * dt/2));
-% 
-% % Phases théoriques correspondantes
-% phase_fd_theo = k_fd_theo * x_obs;
-% phase_cn_theo = k_cn_theo * x_obs;
-
-
+k_fd_theo = (2/dx) * asin((1/S) * sin(omega_pos * dt/2));
+k_cn_theo = (2/dx) * atan((1/S) * sin(omega_pos * dt/2));
 
 
 %% Tracé du spectre
 figure('Position', [100 100 1200 800], 'Color','white');
-subplot(1,2,1);
+subplot(1,3,1);
 plot(f_ax_pos,abs(z_fd_pos),'DisplayName','FDTD', LineWidth=1); hold on
 plot(f_ax_pos,abs(z_cn_pos),'--','DisplayName','CNFDTD', LineWidth=1)
 xlabel('Fréquence (Hz)');
@@ -111,7 +109,7 @@ ylabel('Amplitude Champ E');
 legend('show');
 grid on;
 
-subplot(1,2,2);
+subplot(1,3,2);
 plot(f_ax_pos,unwrap(angle(z_fd_pos),[],2),'DisplayName','FDTD', LineWidth=1); hold on
 plot(f_ax_pos,unwrap(angle(z_cn_pos),[],2),'--','DisplayName','CNFDTD',LineWidth=1);
 plot(f_ax_pos, phase_theo, 'k-', 'DisplayName', 'Physique',LineWidth=1);
@@ -119,4 +117,13 @@ title('Phase');
 xlabel('Frequency [Hz]');
 ylabel('Phase / \pi');
 legend('Show')
+grid on;
+
+subplot(1,3,3);
+plot(f_ax_pos, k_fd_theo,'DisplayName','FD theo'); hold on
+plot(f_ax_pos, k_cn_theo,'DisplayName','CN theo');
+plot(f_ax_pos, k_fd_measured, 'DisplayName','FD exp');
+plot(f_ax_pos, k_cn_measured, 'DisplayName','CN exp');
+plot(f_ax_pos, k_theo, 'DisplayName','Physique');
+legend('show');
 grid on;
