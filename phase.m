@@ -76,6 +76,8 @@ Ecn_fft = fft(e_cn);
 % On retire la phase à l'origine
 z_fd = Efd_fft ./ Efd_src;
 z_cn = Ecn_fft ./ Ecn_src;
+% z_fd = Efd_fft;
+% z_cn = Ecn_fft;
 
 % Parametrage des axes
 n_ech = length(e_fd);
@@ -89,13 +91,9 @@ df = 1 / T_max;           % Résolution fréquentielle
 f_axis = ( 0 : n_ech - 1 )*df;
 
 %% Sélection des fréquences significatives 
-energie_spec  = abs(Efd_fft).^2;                % Energie à chaque fréquence
-energie_cumul = cumsum(energie_spec);           % Energie cumulé à chq  fréquence
-energie_totale = sum(energie_spec)/2;           % Energie totale du spectre
-
 % Garder 99% de l'énergie
-threshold = 0.99; % Seuil d'énergie cumulée
-index_final = find(energie_cumul / energie_totale >= threshold, 1);
+threshold = 0.01; % Seuil d'énergie cumulée
+index_final = find(abs(Efd_fft) < threshold,1);
 
 f_significant = f_axis(1 : index_final);
 z_fd_sign = z_fd(1 : index_final);
@@ -111,13 +109,15 @@ omega_significant = 2 * pi * f_significant;  % Fréquence angulairs
 x_obs = x_j0 * dx;              % Position du point d'observation
 k_theo = omega_significant / c;                                     % Onde physique
 
-phase_theo = k_theo * x_obs;
+phase_theo = - k_theo * x_obs;
 phase_fd = unwrap(angle(z_fd_sign)); 
 phase_cn = unwrap(angle(z_cn_sign));
+% phase_fd = angle(z_fd_sign); 
+% phase_cn = angle(z_cn_sign);
 % Ramener l'erreur de  phase par lamda :
 %  ErrPhase = (Ph_fd-Ph_theor) ./ (x*f/c)
-ErrPhase_fd = abs(phase_fd - phase_theo) ./ (x_obs .* f_significant / c);
-ErrPhase_cn = abs(phase_cn - phase_theo) ./ (x_obs .* f_significant / c);
+ErrPhase_fd = abs(phase_fd - phase_theo) ./ (x_obs * f_significant / c);
+ErrPhase_cn = abs(phase_cn - phase_theo) ./ (x_obs * f_significant / c);
 
 %% Calcul des nombres d'onde
 k_fd_measured =  phase_fd ./x_obs;                          % Dispersion numerique FDTD
@@ -166,8 +166,8 @@ grid on;
 subplot(2,2,3);
 plot(k_theo, theo_ang_freq_fd ./ c,'r--','DisplayName','FD theo','LineWidth',1); hold on
 plot(k_theo, theo_ang_freq_cn ./ c,'b--','DisplayName','CN theo','LineWidth',1);
-plot(k_theo, ang_freq_fd ./ c,'rs', 'DisplayName','FD exp','MarkerIndices', 1:1:length(k_theo));
-plot(k_theo, ang_freq_cn ./ c,'bo', 'DisplayName','CN exp','MarkerIndices', 1:1:length(k_theo));
+plot(k_theo, ang_freq_fd ./ c,'rs', 'DisplayName','FD exp','MarkerIndices', 1:5:length(k_theo));
+plot(k_theo, ang_freq_cn ./ c,'bo', 'DisplayName','CN exp','MarkerIndices', 1:5:length(k_theo));
 plot(k_theo, k_theo , 'k-', 'DisplayName','Physique', 'LineWidth', 0.5);
 legend('show');
 xlabel('k \Delta x [rad/m]')
@@ -177,7 +177,7 @@ grid on;
 
 % Vitesses relatives
 subplot(2,2,4)
-idf = round(0.5 * length(omega_significant)); % 20% de la plage de fréquences
+idf = round(0.2 * length(omega_significant)); % 20% de la plage de fréquences
 plot(omega_significant(idf), vp(idf), 'ko', 'DisplayName','Physique', 'MarkerSize', 10); hold on
 plot(omega_significant(idf), vp_fd(idf), '>', 'DisplayName','FD théorique', 'MarkerSize', 10);
 plot(omega_significant(idf), vp_cn(idf), '+','DisplayName','CN théorique', 'MarkerSize', 10);
