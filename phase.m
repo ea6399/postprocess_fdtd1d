@@ -93,7 +93,7 @@ energie_spec  = abs(Efd_fft).^2;                % Energie à chaque fréquence
 energie_cumul = cumsum(energie_spec);           % Energie cumulé à chq  fréquence
 energie_totale = sum(energie_spec)/2;           % Energie totale du spectre
 
-% Garder 95% de l'énergie
+% Garder 99% de l'énergie
 threshold = 0.99; % Seuil d'énergie cumulée
 index_final = find(energie_cumul / energie_totale >= threshold, 1);
 
