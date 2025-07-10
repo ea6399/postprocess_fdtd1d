@@ -87,24 +87,6 @@ df = 1 / T_max;           % Résolution fréquentielle
 
 
 f_axis = ( 0 : n_ech - 1 )*df;
-f_semi = f_axis <= fs/2;            % Masque booléen des fréquences positives
-% f_ax_pos = f_axis(f_semi);
-% z_fd_pos = z_fd(f_semi);
-% z_cn_pos = z_cn(f_semi);
-% Efd_pos = Efd_fft(f_semi);
-% Ecn_pos = Ecn_fft(f_semi);
-
-% Détermine la plage d'énergie du signal
-% threshold = 0.9; % Seuil d'amplitude relative
-% amplitude_max = max(abs(Efd_fft));
-% mask_ampli =  abs(Efd_fft) / amplitude_max >= threshold ;     % indices des fréquences significatives
-% index_f_max = f_semi & mask_ampli;
-% f_plage = f_axis(index_f_max);  % Plage de fréquences significatives
-% f_ax_pos = f_axis(index_f_max);  % Fréquences positives significatives
-% z_fd_pos = z_fd(index_f_max);
-% z_cn_pos = z_cn(index_f_max);
-% Efd_pos = Efd_fft(index_f_max);
-% Ecn_pos = Ecn_fft(index_f_max);
 
 %% Sélection des fréquences significatives 
 energie_spec  = abs(Efd_fft).^2;                % Energie à chaque fréquence
@@ -115,27 +97,27 @@ energie_totale = sum(energie_spec)/2;           % Energie totale du spectre
 threshold = 0.99; % Seuil d'énergie cumulée
 index_final = find(energie_cumul / energie_totale >= threshold, 1);
 
-f_ax_pos = f_axis(1 : index_final);
-z_fd_pos = z_fd(1 : index_final);
-z_cn_pos = z_cn(1 : index_final);
+f_significant = f_axis(1 : index_final);
+z_fd_sign = z_fd(1 : index_final);
+z_cn_sign = z_cn(1 : index_final);
 Efd_pos = Efd_fft(1 : index_final);
 Ecn_pos = Ecn_fft(1 : index_final);
 
 
 
-omega_pos = 2 * pi * f_ax_pos;  % Fréquence angulairs
+omega_significant = 2 * pi * f_significant;  % Fréquence angulairs
 
 %% Phase
 x_obs = x_j0 * dx;              % Position du point d'observation
-k_theo = omega_pos / c;                                     % Onde physique
+k_theo = omega_significant / c;                                     % Onde physique
 
 phase_theo = k_theo * x_obs;
-phase_fd = unwrap(angle(z_fd_pos)); 
-phase_cn = unwrap(angle(z_cn_pos));
+phase_fd = unwrap(angle(z_fd_sign)); 
+phase_cn = unwrap(angle(z_cn_sign));
 % Ramener l'erreur de  phase par lamda :
 %  ErrPhase = (Ph_fd-Ph_theor) ./ (x*f/c)
-ErrPhase_fd = abs(phase_fd - phase_theo) ./ (x_obs .* f_ax_pos / c);
-ErrPhase_cn = abs(phase_cn - phase_theo) ./ (x_obs .* f_ax_pos / c);
+ErrPhase_fd = abs(phase_fd - phase_theo) ./ (x_obs .* f_significant / c);
+ErrPhase_cn = abs(phase_cn - phase_theo) ./ (x_obs .* f_significant / c);
 
 %% Calcul des nombres d'onde
 k_fd_measured =  phase_fd ./x_obs;                          % Dispersion numerique FDTD
@@ -145,16 +127,16 @@ ang_freq_cn = (2 / dt) * atan(S * sin(k_cn_measured * dx / 2));
 theo_ang_freq_fd = (2 / dt) * asin(S * sin(k_theo * dx / 2)); 
 theo_ang_freq_cn = (2 / dt) * atan(S * sin(k_theo * dx / 2)); 
 
-k_fd_theo = (2/dx) * asin((1/S) * sin(omega_pos * dt/2));
-k_cn_theo = (2/dx) * atan((1/S) * sin(omega_pos * dt/2));
+k_fd_theo = (2/dx) * asin((1/S) * sin(omega_significant * dt/2));
+k_cn_theo = (2/dx) * atan((1/S) * sin(omega_significant * dt/2));
 
 
 %% Calcul des vitesses relatives
-vp = (omega_pos ./ k_theo) / c;  % Vitesse de phase théorique
-vp_fd = (omega_pos ./ k_fd_theo) / c;  % Vitesse de phase FDTD
-vp_cn = (omega_pos ./ k_cn_theo) / c;  % Vitesse de phase CN
-vp_fd_measured = (omega_pos ./ k_fd_measured) / c;  % Vitesse de phase mesurée FDTD
-vp_cn_measured = (omega_pos ./ k_cn_measured) / c;  % Vitesse de phase mesurée CN
+vp = (omega_significant ./ k_theo) / c;  % Vitesse de phase théorique
+vp_fd = (omega_significant ./ k_fd_theo) / c;  % Vitesse de phase FDTD
+vp_cn = (omega_significant ./ k_cn_theo) / c;  % Vitesse de phase CN
+vp_fd_measured = (omega_significant ./ k_fd_measured) / c;  % Vitesse de phase mesurée FDTD
+vp_cn_measured = (omega_significant ./ k_cn_measured) / c;  % Vitesse de phase mesurée CN
 
 
 %% Tracé du spectre
@@ -162,10 +144,10 @@ vp_cn_measured = (omega_pos ./ k_cn_measured) / c;  % Vitesse de phase mesurée 
 % Amplitude de l'onde
 figure('Position', [100 100 1200 800], 'Color','white');
 subplot(2,2,1);
-% plot(f_ax_pos,abs(z_fd_pos),'DisplayName','FDTD', LineWidth=1); hold on
-% plot(f_ax_pos,abs(z_cn_pos),'--','DisplayName','CNFDTD', LineWidth=1)
-plot(f_ax_pos,abs(Efd_pos),'DisplayName','FDTD', LineWidth=1); hold on
-plot(f_ax_pos,abs(Efd_pos),'--','DisplayName','CNFDTD', LineWidth=1)
+% plot(f_significant,abs(z_fd_sign),'DisplayName','FDTD', LineWidth=1); hold on
+% plot(f_significant,abs(z_cn_sign),'--','DisplayName','CNFDTD', LineWidth=1)
+plot(f_significant,abs(Efd_pos),'DisplayName','FDTD', LineWidth=1); hold on
+plot(f_significant,abs(Efd_pos),'--','DisplayName','CNFDTD', LineWidth=1)
 xlabel('Fréquence (Hz)');
 ylabel('Amplitude relative du champ E');
 legend('show');
@@ -173,8 +155,8 @@ grid on;
 
 % Etude de phase
 subplot(2,2,2);
-plot(f_ax_pos,ErrPhase_fd,'DisplayName','FDTD', LineWidth=1); hold on
-plot(f_ax_pos,ErrPhase_cn,'--','DisplayName','CNFDTD',LineWidth=1);
+plot(f_significant,ErrPhase_fd,'DisplayName','FDTD', LineWidth=1); hold on
+plot(f_significant,ErrPhase_cn,'--','DisplayName','CNFDTD',LineWidth=1);
 xlabel('Frequency [Hz]');
 ylabel('Erreur de phase relative');
 legend('Show')
@@ -195,12 +177,12 @@ grid on;
 
 % Vitesses relatives
 subplot(2,2,4)
-idf = round(0.1 * length(omega_pos)); % 20% de la plage de fréquences
-plot(omega_pos(idf), vp(idf), 'ko', 'DisplayName','Physique', 'MarkerSize', 10); hold on
-plot(omega_pos(idf), vp_fd(idf), '>', 'DisplayName','FD théorique', 'MarkerSize', 10);
-plot(omega_pos(idf), vp_cn(idf), '+','DisplayName','CN théorique', 'MarkerSize', 10);
-plot(omega_pos(idf), vp_fd_measured(idf),'s' , 'DisplayName','FD mesuré', 'MarkerSize', 10);
-plot(omega_pos(idf), vp_cn_measured(idf), 'v', 'DisplayName','CN mesuré', 'MarkerSize', 10);
+idf = round(0.1 * length(omega_significant)); % 20% de la plage de fréquences
+plot(omega_significant(idf), vp(idf), 'ko', 'DisplayName','Physique', 'MarkerSize', 10); hold on
+plot(omega_significant(idf), vp_fd(idf), '>', 'DisplayName','FD théorique', 'MarkerSize', 10);
+plot(omega_significant(idf), vp_cn(idf), '+','DisplayName','CN théorique', 'MarkerSize', 10);
+plot(omega_significant(idf), vp_fd_measured(idf),'s' , 'DisplayName','FD mesuré', 'MarkerSize', 10);
+plot(omega_significant(idf), vp_cn_measured(idf), 'v', 'DisplayName','CN mesuré', 'MarkerSize', 10);
 ylabel('Vitesse de phase relative');
 legend('show');
 grid on;
