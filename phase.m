@@ -177,7 +177,7 @@ grid on;
 
 % Vitesses relatives
 subplot(2,2,4)
-idf = round(0.1 * length(omega_significant)); % 20% de la plage de fréquences
+idf = round(0.5 * length(omega_significant)); % 20% de la plage de fréquences
 plot(omega_significant(idf), vp(idf), 'ko', 'DisplayName','Physique', 'MarkerSize', 10); hold on
 plot(omega_significant(idf), vp_fd(idf), '>', 'DisplayName','FD théorique', 'MarkerSize', 10);
 plot(omega_significant(idf), vp_cn(idf), '+','DisplayName','CN théorique', 'MarkerSize', 10);
