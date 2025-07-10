@@ -133,10 +133,10 @@ vp_cn_measured = (omega_pos ./ k_cn_measured) / c;  % Vitesse de phase mesurée 
 % Amplitude de l'onde
 figure('Position', [100 100 1200 800], 'Color','white');
 subplot(2,2,1);
-plot(f_ax_semi,abs(z_fd_semi),'DisplayName','FDTD', LineWidth=1); hold on
-plot(f_ax_semi,abs(z_cn_semi),'--','DisplayName','CNFDTD', LineWidth=1)
-% plot(f_ax_semi,abs(Efd_semi),'DisplayName','FDTD', LineWidth=1); hold on
-% plot(f_ax_semi,abs(Efd_semi),'--','DisplayName','CNFDTD', LineWidth=1)
+% plot(f_ax_semi,abs(z_fd_semi),'DisplayName','FDTD', LineWidth=1); hold on
+% plot(f_ax_semi,abs(z_cn_semi),'--','DisplayName','CNFDTD', LineWidth=1)
+plot(f_ax_semi,abs(Efd_semi),'DisplayName','FDTD', LineWidth=1); hold on
+plot(f_ax_semi,abs(Efd_semi),'--','DisplayName','CNFDTD', LineWidth=1)
 xlabel('Fréquence (Hz)');
 ylabel('Amplitude relative du champ E');
 legend('show');
@@ -166,7 +166,7 @@ grid on;
 
 % Vitesses relatives
 subplot(2,2,4)
-idf = round(0.1 * length(omega_pos)); % 20% de la plage de fréquences
+idf = round(0.2 * length(omega_pos)); % 20% de la plage de fréquences
 plot(omega_pos(idf), vp(idf), 'ko', 'DisplayName','Physique', 'MarkerSize', 10); hold on
 plot(omega_pos(idf), vp_fd(idf), '>', 'DisplayName','FD théorique', 'MarkerSize', 10);
 plot(omega_pos(idf), vp_cn(idf), '+','DisplayName','CN théorique', 'MarkerSize', 10);
